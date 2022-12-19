@@ -5,11 +5,11 @@ import java.io.*;
 public class OS {
     private static char[][] Memory = new char[100][4];
     private char[] buffer = new char[40];
-    private char[] IR = new char[4];
-    private char[] R = new char[4];
-    private int C = 0;
-    private int IC = 0;
-    private int SI = 0;
+    private static char[] IR = new char[4];
+    private static char[] R = new char[4];
+    private static int C = 0;
+    private static int IC = 0;
+    private static int SI = 0;
 
     private String inputFile;
     private String outputFile;
