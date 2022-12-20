@@ -10,6 +10,7 @@ public class OS {
     private static int C = 0;
     private static int IC = 0;
     private static int SI = 0;
+    private static boolean endProgram = false;
 
     private String inputFile;
     private String outputFile;
@@ -38,6 +39,83 @@ public class OS {
                 System.out.print(Memory[i][j]);
             }
             System.out.print("\n");
+        }
+    }
+
+
+    public void GD(int mem)
+    {
+
+    }
+    public void PD(int mem)
+    {
+
+    }
+
+    public void Halt()
+    {
+
+    }
+
+    public void masterMode(int mem)
+    {
+        int i=this.SI;
+        switch (SI)
+        {
+            case 1:
+                GD(mem);
+                break;
+            case 2:
+                PD(mem);
+                break;
+            case 3:
+                Halt();
+                break;
+            default:
+                System.out.println("Mos code is not working");
+
+
+
+    public void execute() {
+        IC = C = SI = 0;
+        int mem;
+
+        while (!endProgram) {
+            for (int i = 0; i < 4; i++) {
+                IR[i] = Memory[IC][i];
+            }
+
+            mem = Integer.parseInt(String.valueOf(IR[2])+String.valueOf(IR[3]));
+            System.out.println(mem);
+            IC++;
+
+            if (IR[0] == 'G') {
+                SI = 1;
+                // masterMode(mem);
+            }
+            else if (IR[0] == 'P')
+            {
+                SI = 2;
+                // masterMode(mem);
+            }
+            else if (IR[0] == 'H')
+            {
+                SI = 3;
+                // masterMode(mem);
+            }
+            else if (IR[0] == 'L'){
+                // LR(mem);
+            }
+            else if (IR[0] == 'S') {
+                // SR(mem);
+            }
+            else if (IR[0] == 'C') {
+                // CR(mem);
+            }
+            else if (IR[0] == 'B') {
+                // BT(mem);
+            }
+
         }
     }
 
@@ -73,7 +151,7 @@ public class OS {
                     dispMemo();
                 }
                 else if(line.contains("$DTA")) {
-                    // call execute function
+                    execute();
                 }
                 else if(line.contains("$END")) {
                     // initialize
