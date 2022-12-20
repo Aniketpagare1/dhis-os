@@ -27,6 +27,8 @@ public class OS {
             this.input = new FileReader(inputFile);
             this.fread = new BufferedReader(input);
             this.output = new FileWriter(outputFile);
+            this.fwrite = new BufferedWriter(output);
+            fwrite.write("Hello12");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -69,12 +71,31 @@ public class OS {
 
     public void PD(int mem)
     {
-
+        char ch;
+        int index=0;
+        System.out.println("inside pd");
+        try {
+            for (int i = 0; i < 10; i++) {
+                for (int j = 0; j < 4; j++) {
+                    fwrite.write(Memory[mem][j]);
+                }
+                mem++;
+            }
+            fwrite.write("\n");
+            fwrite.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public void Halt()
     {
-
+        try {
+            fwrite.write("\n\n");
+            endProgram = true;
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public void masterMode(int mem) {
@@ -114,12 +135,12 @@ public class OS {
             else if (IR[0] == 'P')
             {
                 SI = 2;
-                // masterMode(mem);
+                masterMode(mem);
             }
             else if (IR[0] == 'H')
             {
                 SI = 3;
-                // masterMode(mem);
+                masterMode(mem);
             }
             else if (IR[0] == 'L'){
                 // LR(mem);
@@ -145,6 +166,7 @@ public class OS {
 
         try {
             while((line = fread.readLine()) != null) {
+                System.out.println(line);
                 if (line.contains("$AMJ")){
                     loc = 0;
 
@@ -162,6 +184,9 @@ public class OS {
                         for (int j = 0; j < line.length(); j += 4) {
                             for (int k = 0; k < 4; k++) {
                                 Memory[loc][k] = buffer[j + k];
+                                if (Memory[loc][k] == 'H'){
+                                    break;
+                                }
                             }
                             loc++;
                         }
@@ -171,9 +196,11 @@ public class OS {
                     execute();
                 }
                 else if(line.contains("$END")) {
-                    // initialize
+                    // initilize
+                    System.out.println("Program ENded");
                 }
             }
+
         } catch (IOException e) {
             e.printStackTrace();
         }
