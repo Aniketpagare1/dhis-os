@@ -45,8 +45,28 @@ public class OS {
 
     public void GD(int mem)
     {
+        try {
+            char[] line = new char[40];
+            line = (fread.readLine() + "\0").toCharArray();
+            char c = line[0];
+            int index = 0;
+            int line_byte = 0;
 
+            while(c != '\0') {
+                Memory[mem][line_byte] = c;
+                index++;
+                c = line[index];
+                if (line_byte == 3) {
+                    mem++;
+                }
+                line_byte = index % 4;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        dispMemo();
     }
+
     public void PD(int mem)
     {
 
@@ -57,11 +77,8 @@ public class OS {
 
     }
 
-    public void masterMode(int mem)
-    {
-        int i=this.SI;
-        switch (SI)
-        {
+    public void masterMode(int mem) {
+        switch (SI) {
             case 1:
                 GD(mem);
                 break;
@@ -73,7 +90,8 @@ public class OS {
                 break;
             default:
                 System.out.println("Mos code is not working");
-
+        }
+    }
 
 
     public void execute() {
@@ -91,7 +109,7 @@ public class OS {
 
             if (IR[0] == 'G') {
                 SI = 1;
-                // masterMode(mem);
+                masterMode(mem);
             }
             else if (IR[0] == 'P')
             {
@@ -148,7 +166,6 @@ public class OS {
                             loc++;
                         }
                     }
-                    dispMemo();
                 }
                 else if(line.contains("$DTA")) {
                     execute();
