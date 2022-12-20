@@ -10,7 +10,6 @@ public class OS {
     private static int C = 0;
     private static int IC = 0;
     private static int SI = 0;
-    private static boolean endProgram = false;
 
     private String inputFile;
     private String outputFile;
@@ -39,48 +38,6 @@ public class OS {
                 System.out.print(Memory[i][j]);
             }
             System.out.print("\n");
-        }
-    }
-
-    public void execute() {
-        IC = C = SI = 0;
-        int mem;
-
-        while (!endProgram) {
-            for (int i = 0; i < 4; i++) {
-                IR[i] = Memory[IC][i];
-            }
-
-            mem = Integer.parseInt(String.valueOf(IR[2])+String.valueOf(IR[3]));
-            System.out.println(mem);
-            IC++;
-
-            if (IR[0] == 'G') {
-                SI = 1;
-                // masterMode(mem);
-            }
-            else if (IR[0] == 'P')
-            {
-                SI = 2;
-                // masterMode(mem);
-            }
-            else if (IR[0] == 'H')
-            {
-                SI = 3;
-                // masterMode(mem);
-            }
-            else if (IR[0] == 'L'){
-                // LR(mem);
-            }
-            else if (IR[0] == 'S') {
-                // SR(mem);
-            }
-            else if (IR[0] == 'C') {
-                // CR(mem);
-            }
-            else if (IR[0] == 'B') {
-                // BT(mem);
-            }
         }
     }
 
@@ -116,7 +73,7 @@ public class OS {
                     dispMemo();
                 }
                 else if(line.contains("$DTA")) {
-                    execute();
+                    // call execute function
                 }
                 else if(line.contains("$END")) {
                     // initialize
