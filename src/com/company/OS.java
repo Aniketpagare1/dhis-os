@@ -42,6 +42,40 @@ public class OS {
         }
     }
 
+
+    public void GD(int mem)
+    {
+
+    }
+    public void PD(int mem)
+    {
+
+    }
+
+    public void Halt()
+    {
+
+    }
+
+    public void masterMode(int mem)
+    {
+        int i=this.SI;
+        switch (SI)
+        {
+            case 1:
+                GD(mem);
+                break;
+            case 2:
+                PD(mem);
+                break;
+            case 3:
+                Halt();
+                break;
+            default:
+                System.out.println("Mos code is not working");
+
+
+
     public void execute() {
         IC = C = SI = 0;
         int mem;
@@ -81,6 +115,7 @@ public class OS {
             else if (IR[0] == 'B') {
                 // BT(mem);
             }
+
         }
     }
 
