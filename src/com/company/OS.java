@@ -34,6 +34,17 @@ public class OS {
 
     }
 
+    public void initialize() {
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 100; j++) {
+                Memory[j][i] = '\0';
+            }
+            IR[i] = R[i] = '\0';
+        }
+        IC = SI = C = 0;
+        endProgram = false;
+    }
+
     private void dispMemo(){
         for (int i = 0; i < 100; i++) {
             for (int j = 0; j < 4; j++) {
@@ -72,7 +83,7 @@ public class OS {
     {
         char ch;
         int index=0;
-        System.out.println("inside pd");
+        //System.out.println("inside pd");
         try {
             for (int i = 0; i < 10; i++) {
                 for (int j = 0; j < 4; j++) {
@@ -91,11 +102,10 @@ public class OS {
 
     public void Halt()
     {
-        System.out.println("Inside Halt");
+        //System.out.println("Inside Halt");
         try {
 
             fwrite.write("\n\n");
-            fwrite.close();
             endProgram = true;
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -118,6 +128,40 @@ public class OS {
         }
     }
 
+    public void LR(int mem) {
+        for (int i = 0; i < 4; i++) {
+            R[i] = Memory[mem][i];
+        }
+    }
+
+    public void SR(int mem) {
+        for (int i = 0; i < 4; i++) {
+            Memory[mem][i] = R[i];
+        }
+    }
+
+    public void CR(int mem) {
+        char[] temp = new char[4];
+        int result = 1;
+
+        for (int i = 0; i < 4; i++) {
+            temp[i] = Memory[mem][i];
+            if (temp[i] != R[i]) {
+                result = 0;
+                break;
+            }
+            C = result;
+        }
+
+    }
+
+    public void BT(int mem) {
+        if (C == 1) {
+            IC = mem;
+        }
+        C = 0;
+    }
+
 
     public void execute() {
         IC = C = SI = 0;
@@ -127,11 +171,9 @@ public class OS {
             for (int i = 0; i < 4; i++) {
                 IR[i] = Memory[IC][i];
             }
-            System.out.println(IR);
 
             if (IR[0] != 'H') {
                 mem = Integer.parseInt(String.valueOf(IR[2])+String.valueOf(IR[3]));
-                System.out.println(mem);
             }
 
             IC++;
@@ -151,16 +193,16 @@ public class OS {
                 masterMode(mem);
             }
             else if (IR[0] == 'L'){
-                // LR(mem);
+                LR(mem);
             }
             else if (IR[0] == 'S') {
-                // SR(mem);
+                SR(mem);
             }
             else if (IR[0] == 'C') {
-                // CR(mem);
+                CR(mem);
             }
             else if (IR[0] == 'B') {
-                // BT(mem);
+                BT(mem);
             }
 
         }
@@ -174,7 +216,6 @@ public class OS {
 
         try {
             while((line = fread.readLine()) != null) {
-                System.out.println(line);
                 if (line.contains("$AMJ")){
                     loc = 0;
 
@@ -204,11 +245,11 @@ public class OS {
                     execute();
                 }
                 else if(line.contains("$END")) {
-                    // initilize
+                    initialize();
                     System.out.println("Program Ended");
                 }
             }
-
+            fwrite.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
