@@ -28,7 +28,6 @@ public class OS {
             this.fread = new BufferedReader(input);
             this.output = new FileWriter(outputFile);
             this.fwrite = new BufferedWriter(output);
-            fwrite.write("Hello12");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -77,12 +76,14 @@ public class OS {
         try {
             for (int i = 0; i < 10; i++) {
                 for (int j = 0; j < 4; j++) {
-                    fwrite.write(Memory[mem][j]);
+                    if (Memory[mem][j] != '\0') {
+                        fwrite.write(Memory[mem][j]);
+                    }
                 }
                 mem++;
             }
             fwrite.write("\n");
-            fwrite.close();
+
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -90,8 +91,11 @@ public class OS {
 
     public void Halt()
     {
+        System.out.println("Inside Halt");
         try {
+
             fwrite.write("\n\n");
+            fwrite.close();
             endProgram = true;
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -117,15 +121,19 @@ public class OS {
 
     public void execute() {
         IC = C = SI = 0;
-        int mem;
+        int mem = 0;
 
         while (!endProgram) {
             for (int i = 0; i < 4; i++) {
                 IR[i] = Memory[IC][i];
             }
+            System.out.println(IR);
 
-            mem = Integer.parseInt(String.valueOf(IR[2])+String.valueOf(IR[3]));
-            System.out.println(mem);
+            if (IR[0] != 'H') {
+                mem = Integer.parseInt(String.valueOf(IR[2])+String.valueOf(IR[3]));
+                System.out.println(mem);
+            }
+
             IC++;
 
             if (IR[0] == 'G') {
@@ -197,7 +205,7 @@ public class OS {
                 }
                 else if(line.contains("$END")) {
                     // initilize
-                    System.out.println("Program ENded");
+                    System.out.println("Program Ended");
                 }
             }
 
